@@ -14,11 +14,11 @@ type Order struct {
 	Commission        float64    `json:"commission"`
 	Fee               float64    `json:"fee"`
 	ClosePrice        float64    `json:"closePrice"`
-	CloseTimestampUTC uint64     `json:"closeTimestampUTC"`
+	CloseTimestampUTC int64      `json:"closeTimestampUTC"`
 	CloseLots         float64    `json:"closeLots"`
 	CloseComment      string     `json:"closeComment"`
 	OpenPrice         float64    `json:"openPrice"`
-	OpenTimestampUTC  uint64     `json:"openTimestampUTC"`
+	OpenTimestampUTC  int64      `json:"openTimestampUTC"`
 	Lots              float64    `json:"lots"`
 	ContractSize      float64    `json:"contractSize"`
 	ExpertId          int64      `json:"expertId"`

@@ -82,7 +82,7 @@ type Quote struct {
 	Symbol       string  `json:"symbol"`
 	Bid          float64 `json:"bid"`
 	Ask          float64 `json:"ask"`
-	TimestampUTC uint64  `json:"timestampUTC"`
+	TimestampUTC int64   `json:"timestampUTC"`
 	Last         float64 `json:"last"`
 	Volume       int64   `json:"volume"`
 }
