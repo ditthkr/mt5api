@@ -123,7 +123,7 @@ func (c *Client) OnMail(ctx context.Context) (*WebSocketConnection, error) {
 	return c.ConnectWebSocket(ctx, "/OnMail")
 }
 
-func (c *Client) SocketOnQuote(ctx context.Context, callback func(Quote)) {
+func (c *Client) SocketOnQuote(ctx context.Context, callback func(*Quote)) {
 	backoff := time.Second
 	maxBackoff := 5 * time.Minute
 
@@ -158,7 +158,7 @@ func (c *Client) SocketOnQuote(ctx context.Context, callback func(Quote)) {
 
 					var quote Quote
 					if err := json.Unmarshal(rawMessage, &quote); err == nil && quote.Symbol != "" {
-						callback(quote)
+						callback(&quote)
 						continue
 					}
 
@@ -170,7 +170,7 @@ func (c *Client) SocketOnQuote(ctx context.Context, callback func(Quote)) {
 						switch response.Type {
 						case "Quote":
 							if err := json.Unmarshal(response.Data, &quote); err == nil {
-								callback(quote)
+								callback(&quote)
 							}
 						}
 					}
@@ -198,7 +198,7 @@ func (c *Client) SocketOnQuote(ctx context.Context, callback func(Quote)) {
 	}
 }
 
-func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(OrderUpdateSummary)) {
+func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(*OrderUpdateSummary)) {
 	backoff := time.Second
 	maxBackoff := 5 * time.Minute
 
@@ -233,7 +233,7 @@ func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(OrderUpd
 
 					var orderUpdate OrderUpdateSummary
 					if err := json.Unmarshal(rawMessage, &orderUpdate); err == nil {
-						callback(orderUpdate)
+						callback(&orderUpdate)
 						continue
 					}
 
@@ -245,7 +245,7 @@ func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(OrderUpd
 						switch response.Type {
 						case "OrderUpdate":
 							if err := json.Unmarshal(response.Data, &orderUpdate); err == nil {
-								callback(orderUpdate)
+								callback(&orderUpdate)
 							}
 						}
 					}
@@ -273,7 +273,7 @@ func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(OrderUpd
 	}
 }
 
-func (c *Client) SocketOnOrderProfit(ctx context.Context, callback func(ProfitUpdate)) {
+func (c *Client) SocketOnOrderProfit(ctx context.Context, callback func(*ProfitUpdate)) {
 	backoff := time.Second
 	maxBackoff := 5 * time.Minute
 
@@ -308,7 +308,7 @@ func (c *Client) SocketOnOrderProfit(ctx context.Context, callback func(ProfitUp
 
 					var profitUpdate ProfitUpdate
 					if err := json.Unmarshal(rawMessage, &profitUpdate); err == nil {
-						callback(profitUpdate)
+						callback(&profitUpdate)
 						continue
 					}
 
@@ -320,7 +320,7 @@ func (c *Client) SocketOnOrderProfit(ctx context.Context, callback func(ProfitUp
 						switch response.Type {
 						case "ProfitUpdate":
 							if err := json.Unmarshal(response.Data, &profitUpdate); err == nil {
-								callback(profitUpdate)
+								callback(&profitUpdate)
 							}
 						}
 					}
@@ -348,7 +348,7 @@ func (c *Client) SocketOnOrderProfit(ctx context.Context, callback func(ProfitUp
 	}
 }
 
-func (c *Client) SocketOnOHLC(ctx context.Context, callback func(OhlcSubscription)) {
+func (c *Client) SocketOnOHLC(ctx context.Context, callback func(*OhlcSubscription)) {
 	backoff := time.Second
 	maxBackoff := 5 * time.Minute
 
@@ -384,7 +384,7 @@ func (c *Client) SocketOnOHLC(ctx context.Context, callback func(OhlcSubscriptio
 
 					var ohlc OhlcSubscription
 					if err := json.Unmarshal(rawMessage, &ohlc); err == nil {
-						callback(ohlc)
+						callback(&ohlc)
 						continue
 					}
 
@@ -396,7 +396,7 @@ func (c *Client) SocketOnOHLC(ctx context.Context, callback func(OhlcSubscriptio
 						switch response.Type {
 						case "Ohlc":
 							if err := json.Unmarshal(response.Data, &ohlc); err == nil {
-								callback(ohlc)
+								callback(&ohlc)
 							}
 						}
 					}
