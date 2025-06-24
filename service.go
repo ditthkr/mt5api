@@ -57,3 +57,16 @@ func (c *Client) Search(ctx context.Context, company string) ([]Company, error) 
 
 	return companies, nil
 }
+
+func (c *Client) ServerTimezone(ctx context.Context) (int, error) {
+	body, err := c.doRequest(ctx, "GET", "/ServerTimezone", url.Values{})
+	if err != nil {
+		return 0, err
+	}
+
+	var timeZone int
+	if err := json.Unmarshal(body, &timeZone); err != nil {
+		return 0, err
+	}
+	return timeZone, nil
+}
