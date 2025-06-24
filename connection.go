@@ -119,6 +119,8 @@ func (c *Client) ConnectEx(ctx context.Context, req ConnectExRequest) (string, e
 
 	token := string(body)
 	c.SetToken(token)
+	timezone, _ := c.ServerTimezone(ctx)
+	c.SetTimezone(timezone)
 	return token, nil
 }
 
@@ -165,6 +167,8 @@ func (c *Client) ConnectProxy(ctx context.Context, req ConnectProxyRequest) (str
 
 	token := string(body)
 	c.SetToken(token)
+	timezone, _ := c.ServerTimezone(ctx)
+	c.SetTimezone(timezone)
 	return token, nil
 }
 
