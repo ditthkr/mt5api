@@ -78,6 +78,8 @@ func (c *Client) Connect(ctx context.Context, req ConnectRequest) (string, error
 
 	token := string(body)
 	c.SetToken(token)
+	timezone, _ := c.ServerTimezone(ctx)
+	c.SetTimezone(timezone)
 	return token, nil
 }
 

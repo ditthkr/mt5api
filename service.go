@@ -63,10 +63,9 @@ func (c *Client) ServerTimezone(ctx context.Context) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-
-	var timeZone int
-	if err := json.Unmarshal(body, &timeZone); err != nil {
+	timeZone, err := strconv.ParseFloat(string(body), 64)
+	if err != nil {
 		return 0, err
 	}
-	return timeZone, nil
+	return int(timeZone), nil
 }

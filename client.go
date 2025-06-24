@@ -16,6 +16,7 @@ type Client struct {
 	BaseURL    string
 	HTTPClient *http.Client
 	Token      string // Session token from Connect
+	Timezone   int
 }
 
 // NewClient creates a new MT5 API client
@@ -31,6 +32,10 @@ func NewClient(baseURL string) *Client {
 // SetToken sets the session token for authenticated requests
 func (c *Client) SetToken(token string) {
 	c.Token = token
+}
+
+func (c *Client) SetTimezone(timezone int) {
+	c.Timezone = timezone
 }
 
 // doRequest performs HTTP request with common error handling
