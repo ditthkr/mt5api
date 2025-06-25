@@ -231,12 +231,6 @@ func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(*OrderUp
 						return
 					}
 
-					var orderUpdate OrderUpdateSummary
-					if err := json.Unmarshal(rawMessage, &orderUpdate); err == nil {
-						callback(&orderUpdate)
-						continue
-					}
-
 					var response struct {
 						Type string          `json:"type"`
 						Data json.RawMessage `json:"data"`
@@ -244,8 +238,9 @@ func (c *Client) SocketOnOrderUpdate(ctx context.Context, callback func(*OrderUp
 					if err := json.Unmarshal(rawMessage, &response); err == nil {
 						switch response.Type {
 						case "OrderUpdate":
-							if err := json.Unmarshal(response.Data, &orderUpdate); err == nil {
-								callback(&orderUpdate)
+							var orderUpdateSummary OrderUpdateSummary
+							if err := json.Unmarshal(response.Data, &orderUpdateSummary); err == nil {
+								callback(&orderUpdateSummary)
 							}
 						}
 					}
@@ -551,129 +546,6 @@ type ProfitUpdate struct {
 	Orders      []Order `json:"orders"`
 	MarginLevel float64 `json:"marginLevel"`
 	User        int64   `json:"user"`
-}
-
-// ReadOrderUpdate reads order update from WebSocket
-func (ws *WebSocketConnection) ReadOrderUpdate() (*OrderUpdateSummary, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var update OrderUpdateSummary
-	if err := json.Unmarshal(data, &update); err != nil {
-		return nil, err
-	}
-
-	return &update, nil
-}
-
-// ReadQuote reads quote from WebSocket
-func (ws *WebSocketConnection) ReadQuote() (*Quote, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-	type QuoteWrapper struct {
-		Type  string `json:"type"`
-		Quote Quote  `json:"data"`
-	}
-	var wrapper QuoteWrapper
-	if err := json.Unmarshal(data, &wrapper); err != nil {
-		return nil, err
-	}
-
-	return &wrapper.Quote, nil
-}
-
-// ReadProfitUpdate reads profit update from WebSocket
-func (ws *WebSocketConnection) ReadProfitUpdate() (*ProfitUpdate, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var update ProfitUpdate
-	if err := json.Unmarshal(data, &update); err != nil {
-		return nil, err
-	}
-
-	return &update, nil
-}
-
-// ReadOhlcUpdate reads OHLC update from WebSocket
-func (ws *WebSocketConnection) ReadOhlcUpdate() (*OhlcSubscription, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var ohlc OhlcSubscription
-	if err := json.Unmarshal(data, &ohlc); err != nil {
-		return nil, err
-	}
-
-	return &ohlc, nil
-}
-
-// ReadTickHistory reads tick history from WebSocket
-func (ws *WebSocketConnection) ReadTickHistory() (*TickHistoryEventArgs, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var tickHistory TickHistoryEventArgs
-	if err := json.Unmarshal(data, &tickHistory); err != nil {
-		return nil, err
-	}
-
-	return &tickHistory, nil
-}
-
-// ReadMarketWatch reads market watch update from WebSocket
-func (ws *WebSocketConnection) ReadMarketWatch() (*MarketWatch, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var marketWatch MarketWatch
-	if err := json.Unmarshal(data, &marketWatch); err != nil {
-		return nil, err
-	}
-
-	return &marketWatch, nil
-}
-
-// ReadTickValue reads tick value update from WebSocket
-func (ws *WebSocketConnection) ReadTickValue() (*SymbolTickValue, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var tickValue SymbolTickValue
-	if err := json.Unmarshal(data, &tickValue); err != nil {
-		return nil, err
-	}
-
-	return &tickValue, nil
-}
-
-// ReadMail reads mail message from WebSocket
-func (ws *WebSocketConnection) ReadMail() (*MailMessage, error) {
-	data, err := ws.ReadMessage()
-	if err != nil {
-		return nil, err
-	}
-
-	var mail MailMessage
-	if err := json.Unmarshal(data, &mail); err != nil {
-		return nil, err
-	}
-
-	return &mail, nil
 }
 
 // Additional WebSocket types that might be missing
